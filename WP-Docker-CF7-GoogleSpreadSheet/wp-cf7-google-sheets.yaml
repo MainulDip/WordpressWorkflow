@@ -1,0 +1,51 @@
+#version: '3.9' # optional
+
+services: # required
+  # Database
+
+  db:
+    image: mysql:8.0.27
+    volumes:
+      - wp-cf7-google-sheets:/var/lib/mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    networks:
+      - wpcf7googlesheets
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    ports:
+      - '7000:80'
+    restart: always
+    volumes: ['./wordpress/:/var/www/html']
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    networks:
+      - wpcf7googlesheets
+  phpmyadmin:
+    image: phpmyadmin:5.1.1-apache
+    depends_on:
+     - db
+    restart: always
+    ports:
+     - 7001:80
+    environment:
+     - PMA_ARBITRARY=1
+     - UPLOAD_LIMIT=300M
+    networks:
+     - wpcf7googlesheets
+
+networks:
+  wpcf7googlesheets:
+volumes:
+  wp-cf7-google-sheets:
