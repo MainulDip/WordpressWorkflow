@@ -43,6 +43,8 @@ RUN set -ex; \
 		intl \
 		mysqli \
 		zip \
+		pdo \
+		pdo_mysql \
 	; \
 # https://pecl.php.net/package/imagick
 	pecl install imagick-3.6.0; \

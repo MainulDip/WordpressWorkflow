@@ -22,7 +22,9 @@ services: # required
   wordpress:
     depends_on:
       - db
-    build: ./WP.Dockerfile
+    build:
+      context: .
+      dockerfile: WP.Dockerfile
     ports:
       - '7000:80'
     restart: always
