@@ -23,12 +23,19 @@ services: # required
     depends_on:
       - db
     build:
+    # for multiple or alternate dockerfile use this way
       context: .
-      dockerfile: WP.Dockerfile
+      dockerfile: WP.Custom.Image.Dockerfile
     ports:
       - '7000:80'
     restart: always
-    volumes: ['./wordpress/:/var/www/html']
+    # both volumes format will work.
+    # the mounted volume/folder will always sync with the destination directory/folder
+    # volumes: ['./wordpress/:/var/www/html', './custom-plugin-one:/var/www/html/wp-content/plugins/custom-plugin-one', './custom-theme-one:/var/www/html/wp-content/themes/custom-theme-one' ]
+    volumes:
+    # - ./wordpress/:/var/www/html
+     - ./custom-plugin-one:/var/www/html/wp-content/plugins/custom-plugin-one
+     - ./custom-theme-one:/var/www/html/wp-content/themes/custom-theme-one
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: wordpress
